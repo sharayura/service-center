@@ -62,8 +62,8 @@ values ('client1', '+79123456789', ''),
        ('client3', '+79123456789', '');
 
 insert into orders (created, type, model, serial, problem, set, additional_info, status, client_id)
-values ('2023-10-14T18:07', 'телевизор', 'Samsung UE50l7500', '', 'не включается', 'пульт', '', 'diagnostic', 1),
-       ('2023-10-20T12:35', 'смартфон', 'Mi 10T', '', 'разбит экран', '', '', 'waiting for parts', 3);
+values ('2023-10-14T18:07', 'телевизор', 'Samsung UE50l7500', '', 'не включается', 'пульт', '', 'DIAGNOSTIC', 1),
+       ('2023-10-20T12:35', 'смартфон', 'Mi 10T', '', 'разбит экран', '', '', 'WAITING_PARTS', 3);
 
 insert into items (order_id, user_id, name, quantity, cost, price)
 values (2, 3, 'замена дисплея смартфона', 1, 0, 1500),

@@ -1,2 +1,7 @@
-package entity;public enum Role {
+package entity;
+
+public enum Role {
+    MASTER,
+    MANAGER,
+    RECEPTION
 }
