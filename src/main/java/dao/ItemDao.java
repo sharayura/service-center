@@ -52,6 +52,11 @@ public class ItemDao implements Dao<Long, Item> {
             values (?, ?, ?, ?, ?, ?);
             """;
 
+    private final static String ORDER_SUM = """
+            SELECT sum(price) sum from items
+            WHERE order_id = ?;
+                        """;
+
     @Override
     public boolean delete(Long id) {
         try (var connection = ConnectionManager.get();
@@ -141,6 +146,21 @@ public class ItemDao implements Dao<Long, Item> {
                 item = buildItem(result);
             }
             return Optional.ofNullable(item);
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        }
+    }
+
+    public Long getOrderSum(Long orderId) {
+        try (var connection = ConnectionManager.get();
+             var statement = connection.prepareStatement(ORDER_SUM)) {
+            statement.setLong(1, orderId);
+            Long sum = 0L;
+            var result = statement.executeQuery();
+            if (result.next()) {
+                sum = result.getLong("sum");
+            }
+            return sum;
         } catch (SQLException e) {
             throw new DaoException(e);
         }
