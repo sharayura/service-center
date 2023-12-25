@@ -3,5 +3,6 @@ package entity;
 public enum Role {
     MASTER,
     MANAGER,
-    RECEPTION
+    RECEPTION,
+    ADMIN
 }

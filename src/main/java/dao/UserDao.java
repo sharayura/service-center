@@ -3,6 +3,7 @@ package dao;
 import entity.Role;
 import entity.User;
 import exception.DaoException;
+import lombok.SneakyThrows;
 import utils.ConnectionManager;
 
 import java.sql.ResultSet;
@@ -50,6 +51,9 @@ public class UserDao implements Dao<Long, User>{
             (login, pwd, role, profit_percent)
             values (?, ?, ?, ?);
             """;
+
+    private static final String GET_BY_LOGIN_AND_PWD_SQL =
+            "SELECT * FROM users WHERE login = ? AND pwd = ?";
 
     @Override
     public boolean delete(Long id) {
@@ -136,6 +140,22 @@ public class UserDao implements Dao<Long, User>{
             return Optional.ofNullable(user);
         } catch (SQLException e) {
             throw new DaoException(e);
+        }
+    }
+
+    @SneakyThrows
+    public Optional<User> findByLoginAndPassword(String email, String password) {
+        try (var connection = ConnectionManager.get();
+             var statement = connection.prepareStatement(GET_BY_LOGIN_AND_PWD_SQL)) {
+            statement.setString(1, email);
+            statement.setString(2, password);
+
+            var resultSet = statement.executeQuery();
+            User user = null;
+            if (resultSet.next()) {
+                user = buildUser(resultSet);
+            }
+            return Optional.ofNullable(user);
         }
     }
 }
