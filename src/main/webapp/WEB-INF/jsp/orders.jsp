@@ -13,6 +13,7 @@
     <title>Заказы</title>
 </head>
 <body>
+<%@ include file="header.jsp"%>
 <h1>Список заказов</h1>
 <ul>
     <c:if test="${not empty requestScope.orders}">

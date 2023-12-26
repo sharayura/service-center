@@ -20,7 +20,7 @@ public class CreateUserMapper implements Mapper<User, CreateUserDto> {
                 .login(createUserDto.getLogin())
                 .pwd(createUserDto.getPwd())
                 .role(Role.valueOf(createUserDto.getRole()))
-                .profitPercent(50)
+                .profitPercent(0)
                 .build();
     }
 }
