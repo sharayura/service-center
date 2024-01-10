@@ -1,5 +1,6 @@
 package validator;
 
+import dao.UserDao;
 import entity.Role;
 import dto.CreateUserDto;
 import lombok.AccessLevel;
@@ -12,16 +13,20 @@ public class CreateUserValidator implements Validator<CreateUserDto> {
     public static CreateUserValidator getInstance() {
         return INSTANCE;
     }
+    private final UserDao userDao = UserDao.getInstance();
 
-    public ValidationResult isValid(CreateUserDto uscreateUserDto) {
+    public ValidationResult isValid(CreateUserDto createUserDto) {
         var validationResult = new ValidationResult();
-        if (uscreateUserDto.getLogin().isEmpty()) {
+        if (createUserDto.getLogin().isEmpty()) {
             validationResult.add(Error.of("invalid.login", "Login is invalid"));
         }
-        if (uscreateUserDto.getPwd().isEmpty()) {
+        if (userDao.findByLogin(createUserDto.getLogin()).isPresent()) {
+            validationResult.add(Error.of("taken.login", "Login is already taken"));
+        }
+        if (createUserDto.getPwd().isEmpty()) {
             validationResult.add(Error.of("invalid.password", "Password is invalid"));
         }
-        if (Role.find(uscreateUserDto.getRole()).isEmpty()) {
+        if (Role.find(createUserDto.getRole()).isEmpty()) {
             validationResult.add(Error.of("invalid.role", "Role is invalid"));
         }
         return validationResult;

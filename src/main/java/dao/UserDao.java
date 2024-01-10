@@ -55,6 +55,9 @@ public class UserDao implements Dao<Long, User>{
     private static final String GET_BY_LOGIN_AND_PWD_SQL =
             "SELECT * FROM users WHERE login = ? AND pwd = ?";
 
+    private static final String GET_BY_LOGIN_SQL =
+            "SELECT * FROM users WHERE login = ?";
+
     @Override
     public boolean delete(Long id) {
         try (var connection = ConnectionManager.get();
@@ -144,11 +147,25 @@ public class UserDao implements Dao<Long, User>{
     }
 
     @SneakyThrows
-    public Optional<User> findByLoginAndPassword(String email, String password) {
+    public Optional<User> findByLoginAndPassword(String login, String password) {
         try (var connection = ConnectionManager.get();
              var statement = connection.prepareStatement(GET_BY_LOGIN_AND_PWD_SQL)) {
-            statement.setString(1, email);
+            statement.setString(1, login);
             statement.setString(2, password);
+
+            var resultSet = statement.executeQuery();
+            User user = null;
+            if (resultSet.next()) {
+                user = buildUser(resultSet);
+            }
+            return Optional.ofNullable(user);
+        }
+    }
+    @SneakyThrows
+    public Optional<User> findByLogin(String login) {
+        try (var connection = ConnectionManager.get();
+             var statement = connection.prepareStatement(GET_BY_LOGIN_SQL)) {
+            statement.setString(1, login);
 
             var resultSet = statement.executeQuery();
             User user = null;

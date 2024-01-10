@@ -72,3 +72,6 @@ values (2, 3, 'замена дисплея смартфона', 1, 0, 1500),
 insert into transactions (time, amount, total_cash, description)
 values ('2023-10-14T18:07', 1000, 5000, 'приход'),
        ('2023-11-05T11:45', -3500, 1500, 'покупка дисплея Mi 10T');
+
+alter table users
+    add constraint uc_login unique(login);
